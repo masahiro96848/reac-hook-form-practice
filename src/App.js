@@ -24,7 +24,15 @@ function App() {
         </div>
         <div>
           <label htmlFor="password">Password</label>
-          <input id="password" {...register('password')} type="password" />
+          <input
+            id="password"
+            {...register('password', {
+              required: { value: true, message: '入力が必須の項目です。' },
+              minLength: { value: 8, message: '8文字以上入力してください' },
+            })}
+            type="password"
+          />
+          {errors.password?.message && <div>{errors.password.message}</div>}
         </div>
         <button type="submit">ログイン</button>
       </form>
