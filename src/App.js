@@ -5,10 +5,13 @@ function App() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({ criteriaMode: 'all' })
 
   const onSubmit = (data) => console.log(data)
+
+  const watchShowAge = watch('showAge', false)
 
   return (
     <div className="App">
@@ -44,6 +47,25 @@ function App() {
           )}
           {errors.password?.types?.minLength && (
             <div>8文字以上入力してください。</div>
+          )}
+        </div>
+        {errors.confirmPassword && <div>{errors.confirmPassword.message}</div>}
+        <div>
+          <label htmlFor="confirmPassword">Confirm Password</label>
+          <input
+            id="confirmPassword"
+            {...register('confirmPassword', {
+              validate: (val) => {
+                if (!val) {
+                  return '入力が必須の項目です'
+                } else if (watch('password') !== val) {
+                  return 'パスワードが一致していません'
+                }
+              },
+            })}
+          />
+          {errors.confirmPassword && (
+            <div>{errors.confirmPassword.message}</div>
           )}
         </div>
         <button type="submit">ログイン</button>
