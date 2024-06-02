@@ -6,7 +6,7 @@ function App() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm()
+  } = useForm({ criteriaMode: 'all' })
 
   const onSubmit = (data) => console.log(data)
 
@@ -28,11 +28,23 @@ function App() {
             id="password"
             {...register('password', {
               required: { value: true, message: '入力が必須の項目です。' },
+              pattern: {
+                value: /^[A-Za-z]+$/,
+                message: 'アルファベットのみ入力してください。',
+              },
               minLength: { value: 8, message: '8文字以上入力してください' },
             })}
             type="password"
           />
-          {errors.password?.message && <div>{errors.password.message}</div>}
+          {errors.password?.types?.required && (
+            <div>{errors.password.types.required}</div>
+          )}
+          {errors.password?.types?.pattern && (
+            <div>{errors.password.types.pattern}</div>
+          )}
+          {errors.password?.types?.minLength && (
+            <div>8文字以上入力してください。</div>
+          )}
         </div>
         <button type="submit">ログイン</button>
       </form>
